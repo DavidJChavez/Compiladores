@@ -1,0 +1,30 @@
+AFN Concat(AFN f2){
+    for each e in this.EdosAcept{
+        e.EdoAcept = false;
+        for each t in f2.EdoIni.Transiciones{
+            e.Transiciones.Add(t);
+        }
+    }
+    for each e in f2.EdosAcept{
+        this.EdosAcept.Add(e);
+    }
+    f2 = NULL;
+    return this;
+}
+
+AFN CerraduraKleene(){
+    Estado e1, e2;
+    e1 = new Estado();
+    e2 = new Estado();
+    for each e in this.EdosAcept{
+        e.Transiciones.Add(new Transicion(eps, e2));
+        e.Transiciones.Add(new Transicion(eps, this.EdoIni));
+        e.EdoAcept = false;
+    }
+    e1.Transiciones.Add(new Transicion(eps, this.EdoIni));
+    e1.Transiciones.Add(new Transicion(eps, e2));
+    this.EdosAcept.clear();
+    this.EdosAcept.Add(e2);
+    e2.EdoAcept = true;
+    this.EdoIni = e1;
+}
